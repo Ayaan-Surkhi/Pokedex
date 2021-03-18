@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+$main-font: 'Rubik', sans-serif;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: $main-font;
+}
+
+body{
+    overflow-x: hidden;
+}
+
+header{
+background-color: rgb(0, 140, 255);
+text-align: center;
+width: 100vw;
+font-size: 50px;
+}
+
+.search{
+    margin-top: 2%;
+    margin-left: 30%;
+    // width: 460px;
+    // height: 50px;
+    width: 42%;
+    height: 10%;
+    border: 4px rgb(187, 183, 183) solid;
+    padding: 5px;
+
+    input{
+        border: none;
+        outline: none;
+        font-size: 30px;
+    }
+
+    input::placeholder{
+        color: black;
+    }
+
+}
+
+.pokemon{
+position: relative;
+margin-left: 8%;
+display: none;
+
+    .image{
+    display: grid;
+
+    button{
+    position: relative;
+    left: 100px;
+    margin-bottom: 10px;
+    width: 60px;
+    height: 40px;
+    background-color: gold;
+    border: none;
+    outline: none;
+    font-size: 20px;
+}
+
+    .base{
+    display: none;
+    background-color: rgb(0, 195, 255);
+    }
+
+    img{
+    width: 300px;
+    height: 300px;    
+    }
+}
+
+    .info{
+        margin-top: 4%;
+
+        h1{
+            margin-top: 10px;
+        }
+    }
+
+}
+
+.stats{
+    display: none;
+    margin-left: 32%;
+    margin-top: 2%;
+
+    h1{
+        margin-top: 10px;
+    }
+}
