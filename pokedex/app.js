@@ -32,10 +32,8 @@ number.textContent = `#${pokemonData.id.toString().padStart(4, '0')}`;
 
 if(pokemonData.types.length > 1){
     type.textContent = `Type: ${pokemonData.types[0].type.name}/${pokemonData.types[1].type.name}`;
-    // console.log(type.textContent);
 }else{
     type.textContent = `Type: ${pokemonData.types[0].type.name}`;
-    // console.log(type.textContent);
 }
 
 if(pokemonData.abilities.length === 1){
@@ -46,27 +44,17 @@ if(pokemonData.abilities.length === 1){
     ability.textContent = `Abilities: ${pokemonData.abilities[0].ability.name}, ${pokemonData.abilities[1].ability.name} and ${pokemonData.abilities[2].ability.name}`;
 }
 
-// if(shiny.className === 'shiny'){
     shiny.addEventListener('click', (e) => {
         image.src = pokemonData.sprites.front_shiny;
-        // shiny.textContent = 'Base';
-        // shiny.className = 'base';
         base.style.display = 'block';
         shiny.style.display = 'none';
     });
-// }
 
     base.addEventListener('click', () => {
         image.src = pokemonData.sprites.front_default;
         shiny.style.display = 'block';
         base.style.display = 'none';        
     });
-
-// if(shiny.className === 'base'){
-//     shiny.addEventListener('click', (e) => {
-//         image.src = pokemonData.sprites.front_default;
-//     });
-// }    
 
 const HpStat = pokemonData.stats[0].base_stat;
 const AttackStat = pokemonData.stats[1].base_stat;
