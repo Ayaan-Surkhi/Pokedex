@@ -19,10 +19,14 @@
         <img src="./images/pokedex.png" width="80px" height="80px">
     </header>
 
-    <div class="search">        
-        <label for="pokemon"><i class="fas fa-search fa-2x"></i></label>
-        <input type="text" id ="search" placeholder="Enter pokemon name">
+    <div class="search"> 
+        <form autocomplete="off" id = 'search-form'>
+            <label for="pokemon"><i class="fas fa-search fa-2x"></i></label>
+            <input type="text" id ="search" placeholder="Enter pokemon name">    
+        </form>       
     </div>
+
+        <div class="suggestionList"></div>
 
     <div class="pokemon">
      <div class="image">
