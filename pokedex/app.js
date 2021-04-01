@@ -33,7 +33,7 @@ pokemonName.textContent = `Name: ${name}`;
 number.textContent = `#${pokemonData.id.toString().padStart(4, '0')}`;
 
 if(pokemonData.types.length > 1){
-    type.textContent = `Type: ${pokemonData.types[0].type.name}/${pokemonData.types[1].type.name}`;
+    type.textContent = `Type: ${pokemonData.types[0].type.name}/${pokemonData.types[1].type.name}`; 
 }else{
     type.textContent = `Type: ${pokemonData.types[0].type.name}`;
 }
