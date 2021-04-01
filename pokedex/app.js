@@ -1,4 +1,6 @@
+const searchForm = document.getElementById('search-form');
 const search = document.getElementById('search');
+const suggestionList = document.querySelector('.suggestionList');
 const pokemon = document.querySelector('.pokemon');
 const image = document.querySelector('.pokemon-image');
 const pokemonName = document.querySelector('.pokemon-name');
@@ -36,21 +38,98 @@ if(pokemonData.types.length > 1){
     type.textContent = `Type: ${pokemonData.types[0].type.name}`;
 }
 
-if(pokemonData.abilities.length === 1){
-    ability.textContent = `Ability: ${pokemonData.abilities[0].ability.name}`;
-}else if(pokemonData.abilities.length === 2){
-    ability.textContent = `Abilities: ${pokemonData.abilities[0].ability.name} and ${pokemonData.abilities[1].ability.name}`;
-}else if(pokemonData.abilities.length === 3){
-    ability.textContent = `Abilities: ${pokemonData.abilities[0].ability.name}, ${pokemonData.abilities[1].ability.name} and ${pokemonData.abilities[2].ability.name}`;
+if(pokemonData.abilities.length === 1){    
+        fetch(`https://pokeapi.co/api/v2/ability/${pokemonData.abilities[0].ability.name}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.effect_entries[0].language.name === 'en'){
+            const abbr = data.effect_entries[0].short_effect;
+            ability.innerHTML = `Ability: <abbr title = "${abbr}"> ${pokemonData.abilities[0].ability.name} </abbr>`;
+            }else if(data.effect_entries[1].language.name === 'en'){
+            const abbr = data.effect_entries[1].short_effect;
+            ability.innerHTML = `Ability: <abbr title = "${abbr}"> ${pokemonData.abilities[0].ability.name} </abbr>`;
+            }    
+        }).catch(err => console.log(err));
+
+    }else if(pokemonData.abilities.length === 2){
+    fetch(`https://pokeapi.co/api/v2/ability/${pokemonData.abilities[0].ability.name}`)
+    .then(res => res.json())
+    .then(data => displayAbilityAbbr(data))
+    .catch(err => console.log(err));
+
+    const displayAbilityAbbr = (ability1) => {
+    fetch(`https://pokeapi.co/api/v2/ability/${pokemonData.abilities[1].ability.name}`)
+    .then(res => res.json())
+    .then(data => {
+    const abilityLang = (abbr1, abbr2) => {
+    ability.innerHTML = `Abilities: <abbr title = "${abbr1}"> ${pokemonData.abilities[0].ability.name} </abbr> and <abbr title="${abbr2}"> ${pokemonData.abilities[1].ability.name} </abbr>`;    
+    }
+
+    const abbr1 = ability1.effect_entries[0].short_effect;
+    const abbr2 = ability1.effect_entries[1].short_effect;        
+    const abbr3 = data.effect_entries[0].short_effect;
+    const abbr4 = data.effect_entries[1].short_effect;
+
+    if(data.effect_entries[0].language.name === 'en' && ability1.effect_entries[0].language.name === 'en'){
+        abilityLang(abbr1, abbr3);
+    }else if(data.effect_entries[0].language.name === 'en' && ability1.effect_entries[1].language.name === 'en'){
+        abilityLang(abbr2, abbr3);
+    }else if(data.effect_entries[1].language.name === 'en' && ability1.effect_entries[0].language.name === 'en'){
+        abilityLang(abbr1, abbr4);
+    }else if(data.effect_entries[1].language.name === 'en' && ability1.effect_entries[1].language.name === 'en'){
+        abilityLang(abbr2, abbr4);
+    }
+    })
+    .catch(err => console.log(err));
+}
+    
+    }else if(pokemonData.abilities.length === 3){
+    fetch(`https://pokeapi.co/api/v2/ability/${pokemonData.abilities[0].ability.name}`)
+    .then(res => res.json())
+    .then(data => ability2(data))
+    .catch(err => console.log(err));
+    
+    const ability2 = (ability1) => {
+    fetch(`https://pokeapi.co/api/v2/ability/${pokemonData.abilities[1].ability.name}`)
+    .then(res => res.json())
+    .then(data => displayAbilityAbbr(ability1, data)
+)
+.catch(err => console.log(err));
 }
 
+    const displayAbilityAbbr = (ability1, ability2) => {
+        fetch(`https://pokeapi.co/api/v2/ability/${pokemonData.abilities[2].ability.name}`)
+        .then(res => res.json())
+        .then(data => {
+        
+        const enAbility1 = ability1.effect_entries.filter(entry => {
+            return entry.language.name === 'en';
+        });
+
+        const enAbility2 = ability2.effect_entries.filter(entry => {
+            return entry.language.name === 'en';
+        });
+
+        const enAbility3 = data.effect_entries.filter(entry => {
+            return entry.language.name === 'en';
+        });
+
+        console.log(enAbility3);
+
+        ability.innerHTML = `Abilities: <abbr title = "${enAbility1[0].short_effect}"> ${pokemonData.abilities[0].ability.name} </abbr> ,<abbr title="${enAbility2[0].short_effect}"> ${pokemonData.abilities[1].ability.name} </abbr> and <abbr title = "${enAbility3[0].short_effect}"> ${pokemonData.abilities[2].ability.name} </abbr> `;     
+        });
+    }    
+}
+    
     shiny.addEventListener('click', (e) => {
+        e.preventDefault();
         image.src = pokemonData.sprites.front_shiny;
         base.style.display = 'block';
         shiny.style.display = 'none';
     });
 
-    base.addEventListener('click', () => {
+    base.addEventListener('click', (e) => {
+        e.preventDefault();
         image.src = pokemonData.sprites.front_default;
         shiny.style.display = 'block';
         base.style.display = 'none';        
@@ -231,11 +310,68 @@ if(SpeedStat < 50){
     }    
 };
 
-const getPokemon = () => {
-fetch(`https://pokeapi.co/api/v2/pokemon/${search.value.toLowerCase()}`)
+const getPokemon = (searchVal) => {    
+fetch(`https://pokeapi.co/api/v2/pokemon/${searchVal.toLowerCase()}`)
 .then(res => res.json())
-.then(data => displayPokemon(data))
+.then(data => {
+    displayPokemon(data);
+})
 .catch(err => console.log(err));
+
+suggetionsList.style.display = 'none';
 };
 
-search.addEventListener('change', getPokemon);
+const searchFilter = (pokemons) => {
+let matches = pokemons.filter(pokemon => {
+    const regExp = new RegExp(`^${search.value}`, 'gi');
+    return pokemon.name.match(regExp);
+});
+
+if(search.value.length === 0){
+    matches = [];
+    suggestionList.innerHTML = '';
+}
+
+outputSuggetions(matches)
+};
+
+const outputSuggetions = (matches) => {
+  if(search.value.length !== 0){
+    if(matches.length > 0){
+        const suggetions = matches.map(match => 
+        `<div class="suggetion">
+        <h3 class="suggestion-name">${match.name}</h3>
+        </div>`
+        ).join('');
+
+        suggestionList.style.display = 'block';
+
+        suggestionList.innerHTML = suggetions;
+
+        const suggestion = document.querySelectorAll('.suggetion');
+        const suggestionName = document.querySelectorAll('.suggetion-name');
+       
+        suggestion.forEach((el, i) => {
+            el.addEventListener('click', () => {
+                search.value = suggestionName[i].textContent;
+                getPokemon(search.value);
+                });            
+        })
+    }
+ }
+}
+
+const searchInit = () => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/?limit=1118`)
+    .then(res => res.json())
+    .then(data => searchFilter(data
+        .results))
+    .catch(err => console.log(err));
+};
+
+searchForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    getPokemon(search.value)
+});
+
+search.addEventListener('input', searchInit);
