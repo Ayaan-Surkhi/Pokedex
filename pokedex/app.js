@@ -338,15 +338,15 @@ outputSuggetions(matches)
 const outputSuggetions = (matches) => {
   if(search.value.length !== 0){
     if(matches.length > 0){
-        const suggetions = matches.map(match => 
-        `<div class="suggetion">
+        const suggestions = matches.map(match => 
+        `<div class="suggestion">
         <h3 class="suggestion-name">${match.name}</h3>
         </div>`
         ).join('');
 
         suggestionList.style.display = 'block';
 
-        suggestionList.innerHTML = suggetions;
+        suggestionList.innerHTML = suggestions;
 
         const suggestion = document.querySelectorAll('.suggetion');
         const suggestionName = document.querySelectorAll('.suggetion-name');
