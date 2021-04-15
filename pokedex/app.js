@@ -9,6 +9,7 @@ const type = document.querySelector('.pokemon-type');
 const ability = document.querySelector('.pokemon-abilities');
 const shiny = document.querySelector('.shiny');
 const base = document.querySelector('.base');
+const entry = document.querySelector('.entry');
 const stats = document.querySelector('.stats');
 const Hp = document.getElementById('Hp');
 const Attack = document.getElementById('Attack');
@@ -134,6 +135,15 @@ if(pokemonData.abilities.length === 1){
         shiny.style.display = 'block';
         base.style.display = 'none';        
     });
+    
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonData.name}/`)
+.then(res => res.json())
+.then(data => {
+    entry.style.display = 'block';
+    const pokedex_entry = data.flavor_text_entries.find(flavor_text => flavor_text.language.name === 'en');
+    entry.innerHTML = `${pokemonData.name}'s pokedex entry says: ${pokedex_entry.flavor_text}`;
+})
+.catch(err => console.log(err));
 
 const HpStat = pokemonData.stats[0].base_stat;
 const AttackStat = pokemonData.stats[1].base_stat;
